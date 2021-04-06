@@ -69,12 +69,94 @@ SELECT
  CROSS JOIN department d;
 
 
+-- 내부 조인
+-- INNER JOIN
+-- 양쪽 테이블에 모두 존재하는 데이터만 조인하는 것
+SELECT
+      e.emp_no
+    , e.name
+    , d.dept_name
+    , e.position
+    , e.hire_date
+    , e.salary
+  FROM employee e INNER JOIN department d
+    ON e.depart = d.dept_no;
+
+SELECT
+      e.emp_no
+    , e.name
+    , d.dept_name
+    , e.position
+    , e.hire_date
+    , e.salary
+  FROM employee e, department d
+  WHERE e.depart = d.dept_no;
+  
+  
+-- 외부조인 연습을 위한 데이터 추가
+-- '참조 무결성'에 의해 아래 데이터는 삽입되지 않는다.
+-- 잠시 외래키 제약조건(employee_department_fk)을 비활성화한다.
+ALTER TABLE employee DISABLE CONSTRAINT employee_department_fk;
+
+-- 이제 외래키 제약조건이 없기 때문에 아래 데이터는 입력이 가능하다.
+INSERT INTO employee 
+       (emp_no, name, depart, position, gender, hire_date, salary)
+VALUES
+       (1005, '김미나', 5, '사원', 'F', '18-05-01', 18000000);
 
 
+-- 외부 조인
+-- 모든 사원의 emp_no, name, dept_name, position을 출력하시오.
+SELECT 
+       e.emp_no
+     , e.name
+     , d.dept_name
+     , e.position
+  FROM employee e LEFT OUTER JOIN department d
+    ON e.depart = d.dept_no;
 
+SELECT 
+       e.emp_no
+     , e.name
+     , d.dept_name
+     , e.position
+  FROM employee e, department d
+ WHERE e.depart = d.dept_no(+);
 
+SELECT 
+       e.emp_no
+     , e.name
+     , d.dept_name
+     , e.position
+  FROM department d RIGHT OUTER JOIN employee e
+    ON d.dept_no = e.depart;
 
+SELECT 
+       e.emp_no
+     , e.name
+     , d.dept_name
+     , e.position
+  FROM department d, employee e
+ WHERE d.dept_no(+) = e.depart;
+ 
+ 
+-- 문제. 아래와 같이 조회하시오.
+-- department 테이블의 데이터는 모두 조회하고, employee 테이블의 데이터는 일치하는 것만 조회하시오.
+/*
+    dept_no   사원수
+    1           2
+    2           2
+    3           0
+    4           0
+*/
+ 
+SELECT 
+       d.dept_no    
+     , COUNT(e.depart) AS 사원수
+  FROM department d LEFT OUTER JOIN employee e
+    ON d.dept_no = e.depart
+ GROUP BY d.dept_no;
+  
 
-
-
-
+ 
+ 
