@@ -136,7 +136,7 @@ SELECT DUMMY FROM DUAL;
 -- 1) 반올림 함수
 -- ROUND(값, 자릿수)
 SELECT ROUND(123.4567, 2) FROM DUAL;   -- 소수 자릿수 2자리로 반올림 123.46    
-SELECT ROUND(123.4567, 1) FROM DUAL;   -- 소수 자릿수 2자리로 반올림 123.5   
+SELECT ROUND(123.4567, 1) FROM DUAL;   -- 소수 자릿수 1자리로 반올림 123.5   
 SELECT ROUND(123.4567, 0) FROM DUAL;   -- 정수로 반올림 123
 SELECT ROUND(123.4567) FROM DUAL;      -- 정수로 반올림 123
 SELECT ROUND(123.4567, -1) FROM DUAL;   --십의 자리로 반올림 120   

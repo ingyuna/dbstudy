@@ -104,6 +104,7 @@ INSERT INTO employee
 VALUES
        (1005, '김미나', 5, '사원', 'F', '18-05-01', 18000000);
 
+UPDATE employee SET salary = 1800000 WHERE emp_no = 1005;   -- 위에 0 하나 더붙여서 수정함ㅎㅎ..
 
 -- 외부 조인
 -- 모든 사원의 emp_no, name, dept_name, position을 출력하시오.
@@ -156,7 +157,65 @@ SELECT
   FROM department d LEFT OUTER JOIN employee e
     ON d.dept_no = e.depart
  GROUP BY d.dept_no;
+ 
+ 
   
+-- 리뷰1. 모든 사원들의 name, dept_name을 조회하시오. (부서가 없는 사원은 조회하지 마시오.)
+SELECT
+       e.name
+     , d.dept_name
+  FROM department d, employee e
+ WHERE d.dept_no = e.depart;   -- 내부조인 
+
+SELECT
+       e.name
+     , d.dept_name
+  FROM department d INNER JOIN employee e
+    ON d.dept_no = e.depart; 
+ 
+
+-- 리뷰2. '서울'에서 근무하는 사원들의 emp_no, name을 조회하시오.
+SELECT
+       emp_no
+     , name 
+  FROM department d, employee e
+ WHERE d.dept_no = e.depart   -- 조인조건을 먼저 작성
+   AND d.location = '서울';
+
+SELECT
+       emp_no
+     , name 
+  FROM department d INNER JOIN employee e
+    ON d.dept_no = e.depart
+ WHERE d.location = '서울';
+
+
+-- 리뷰3. 모든 사원들의 name, dept_name을 조회하시오. (부서가 없는 사원도 조회하시오.)
+
+/*
+department  employee
+dept_no     depart
+1              1
+2              1
+3              2
+4              2
+               5 김미나
+                
+일치하는 부서번호가 없는 김미나도 출력하기 위해서, 오른쪽 외부 조인으로 처리한다.
+*/
+SELECT
+       e.name
+     , d.dept_name
+  FROM department d, employee e
+ WHERE d.dept_no(+) = e.depart;  -- (+)가 있는 테이블은 일치하는 정보만 조회, (+)가 없는 테이블은 전체 조회
+
+SELECT
+       e.name
+     , d.dept_name
+  FROM department d RIGHT OUTER JOIN employee e
+    ON d.dept_no = e.depart;
+
+
 
  
  
