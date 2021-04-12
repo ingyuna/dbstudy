@@ -1,5 +1,6 @@
 package main;
 
+import java.util.List;
 import java.util.Scanner;
 
 import dao.MembersDao;
@@ -20,6 +21,9 @@ public class MembersHandler {
 		System.out.println("1. 가입");
 		System.out.println("2. 탈퇴");
 		System.out.println("3. 수정");
+		System.out.println("4. 아이디 찾기");
+		System.out.println("5. 회원 검색");
+		System.out.println("6. 전체 회원 검색");
 		System.out.println("==================");
 	}
 	public void execute() {
@@ -27,11 +31,14 @@ public class MembersHandler {
 			menu();
 			System.out.println("선택(0~) >>>");
 			switch (sc.nextInt()) {
-			case 0 : System.out.println("프로그램을 종료합니다."); return;
+			case 0 : System.out.println("프로그램을 종료합니다."); sc.close(); return;
 			case 1 : join(); break;
 			case 2 : leave(); break;
 			case 3 : modify(); break;
-			
+			case 4 : findID(); break;
+			case 5 : inquiryMember(); break;
+			case 6 : inquriyAll(); break;
+			default : System.out.println("잘못된 선택입니다. 다시 입력하세요.");
 			}
 		}
 	}
@@ -39,10 +46,15 @@ public class MembersHandler {
 	public void join() {
 		System.out.print("신규 아이디 >>> ");
 		String mId = sc.next();
-		System.out.print("사용자명 >>> ");
-		String mName = sc.next();
 		System.out.print("이메일 >>> ");
 		String mEmail = sc.next();
+		// 일치하는 mId나 mEmail이 이미 DB에 있으면(SELECT) join() 메소드 종료
+		if (dao.doubleCheck(mId, mEmail)) {
+			System.out.println("이미 가입된 정보입니다. 다른 정보로 가입하세요.");
+			return;
+		}
+		System.out.print("사용자명 >>> ");
+		String mName = sc.next();
 		
 		MembersDto dto = new MembersDto();
 		dto.setmId(mId);
@@ -97,7 +109,37 @@ public class MembersHandler {
 			System.out.println(mId + "님의 정보수정이 실패했습니다.");
 		} 
 	}
-	
-	
+	// 아이디 찾기
+	public void findID() {
+		System.out.print("가입 이메일 >>> ");
+		String mEmail = sc.next();
+		
+		String mId = dao.findmIdBymEmail(mEmail);
+		if (mId != null) {
+			System.out.println("아이디는 " + mId + "입니다.");
+		} else {
+			System.out.println("일치하는 정보가 없습니다.");
+		}
+	} 
+	// 회원 검색
+	public void inquiryMember() {
+		System.out.print("조회할 회원 아이디 >>> ");
+		String mId = sc.next();
+		
+		MembersDto dto = dao.selectMembersDtoBymId(mId);
+		if (dto != null) {
+			System.out.println("조회결과: " + dto);
+		} else {
+			System.out.println(mId + " 아이디를 가진 회원이 없습니다.");
+		}
+	}
+	// 전체 회원 검색
+	public void inquriyAll() {
+		List<MembersDto> list = dao.selectMembersList();
+		System.out.println("전체 회원수: " + list.size());
+		for (MembersDto dto : list) {
+			System.out.println(dto);
+		}
+	}
 }
 

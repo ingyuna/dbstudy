@@ -62,9 +62,10 @@ public class MembersDto {
 	// toStirng() 메소드를 오버라이드 해 둔다.
 	@Override
 	public String toString() {
-		return "[mNo=" + mNo + ", mId=" + mId + ", mName=" + mName + ", mDate=" + mDate + "]";
+		return "[mNo=" + mNo + ", mId=" + mId + ", mName=" + mName + ", mEmail=" + mEmail + ", mDate="
+				+ mDate + "]";
 	}
-	
+
 	
 	
 	
