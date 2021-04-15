@@ -59,15 +59,83 @@ SELECT * FROM DUAL;
 -- 3. 외래키가 필요한 테이블을 선정하고 적절한 칼럼에 외래키를 추가하시오.
 
 -- 4. 2014년 7월 4일부터 7월 7일 사이에 주문 받은 도서를 제외하고 나머지 모든 주문 정보를 조회하시오.
+SELECT
+     , order_id
+     , customer_id
+     , bookd_id
+     , sales_price
+     , order_date
+FROM orders
+WHERE order_date NOT BETWEEN '14/07/04' AND /14/07/07';
+
+
+
 
 -- 5. 박지성의 총 구매액(SALE_PRICE)을 조회하시오.
+SELECT
+    , c.customer_name
+    , SUM(o.sales_price) AS 총구매액
+  FROM customer c inner join orders o
+  ON c.customer_id = o.customer_id
+ WHERE c.customer_name = '박지성'
+ GROUP BY c.customer_name;
+
+
 
 -- 6. 박지성이 구매한 도서의 수를 조회하시오.
+SELECT
+     , c.customer_name
+     , COUNT(o.order_id) AS 총도서구매수
+  FROM  customer c inner join orders o
+    ON c.customer_id = o.orders_id
+ WHERE c.customer_name = '박지성'
+ GROUP BY c.customer_name;
+
+
+
 
 -- 7. 박지성이 구매한 도서를 발간한 출판사(PUBLISHER)의 수를 조회하시오.
+SELECT
+     , c.customer_name
+     COUNT(DISTINCT b.publisher) AS 출판사수
+  FROM customer c inner join orders o
+    on c.customer_id = o.orders inner join book b
+    on b.book_id = o.book_id
+ where c.customer_name='박지성'
+ group by c.customer_name;
 
--- 8. 고객별로 분류하여 각 고객의 이름과 각 고객별 총 구매액을 조회하시오.
+     
+
+
+
+
+
+
+-- 8. 고객별로 분류하여 각 고객의 이름과 각 고객별 총 구매액을 조회하시오.주문 이력이 없으면 0으로 조회하시오. 
+SELECT
+       c.customer_name
+     , NVL(SUM(o.sales_price), 0) AS 총구매액
+  FROM customer c inner join orders o
+    ON c.customer_id = o.order_id
+ group by c.customer_name;
+
+
+
+
+
+
 
 -- 9. 주문한 이력이 없는 고객의 이름을 조회하시오.
 
+
+
+
+
+
 -- 10. 고객별로 총 구매횟수를 조회하시오.
+
+
+
+
+
+
